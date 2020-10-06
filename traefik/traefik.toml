@@ -1,0 +1,57 @@
+defaultEntryPoints = ["https","http"]
+#defaultEntryPoints = ["http"]
+
+[api]
+entryPoint = "traefik"
+dashboard = true
+
+[entryPoints]
+  [entryPoints.traefik]
+  address = ":8080"
+
+  [entryPoints.traefik.auth.basic]
+  users = ["admin:{SHA}VnunnBsYt1YIZ7T5FusaImZSluU"]
+
+
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+      minVersion = "VersionTLS12"
+      cipherSuites = [
+        "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
+        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA"
+      ]
+  
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/certs/live/daghlani.ir/fullchain1.pem"
+      keyFile = "/certs/live/daghlani.ir/privkey1.pem"
+
+#[acme]
+#email = "{{ EMAIL }}"
+#storage = "/etc/traefik/acme/acme.json"
+#entryPoint = "https"
+#onHostRule = true
+#  [acme.tlsChallenge]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "daghlani.ir"
+watch = true
+exposedbydefault = false
+
+
+#[metrics]
+#  [metrics.prometheus]
+#    entryPoint = "traefik"
+#    buckets = [0.1,0.3,1.2,5.0]
+
+
